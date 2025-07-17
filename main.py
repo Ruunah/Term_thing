@@ -8,11 +8,13 @@ from commands import command_registry
 def main():
     while True:
             try:
-                command_input = input("-->").strip()
+                command_input = input("-->").split()
                 if not command_input:
                     continue
+                command_name=command_input[0]
+                args=command_input[1:]
 
-                if command_input in command_registry:
+                if command_input[0] in command_registry:
                     command_execution()
 
                 if "exit" == command_input:
@@ -25,7 +27,8 @@ def main():
                 print("Exiting...")
                 break
 
-def command_execution(command_input):
+def command_execution(command_input, args):
+    command_registry[command_name](*args)
 
 if __name__ == "__main__":
     main()
