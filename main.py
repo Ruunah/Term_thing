@@ -4,13 +4,15 @@ from datetime import datetime
 from commands import command_registry
 
 def main():
-    while true:
+    while True:
             try:
-                command_input = input("~~>").strip()
+                command_input = input("-->").strip()
                 if not command_input:
                     continue
-                if exit == command_input:
+                if "exit" == command_input:
                     break
             except(KeyboardInterrupt, EOFError):
                 print("Exiting...")
                 break
+if __name__ == "__main__":
+    main()
