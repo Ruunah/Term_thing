@@ -48,13 +48,13 @@ class TerminalWindow(QWidget):
 
         size_str = config.get("font", {}).get("Size").strip()
 
-            try:
-                size = int(size_str)
-                if size == 0:
-                    raise ValueError("Font size cannot be 0")
-            except (ValueError, TypeError):
-                size = 14
-                startup_message.append(f"/n Warning: value {size_str}, not valid, using default")
+        try:
+            size = int(size_str)
+            if size == 0:
+                raise ValueError("Font size cannot be 0")
+        except (ValueError, TypeError):
+            size = 14
+            self.startup_message.append(f"/n Warning: value {size_str}, not valid, using default")
 
         font = QFont(font_family, size)
 
