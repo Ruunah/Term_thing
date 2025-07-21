@@ -1,3 +1,10 @@
+[window settings]
+## Size only required if fullscreen is not active
+Size = "800x600"
+Fullscreen = "True"
+## Transparency goes from 1 to 0
+Transparency = ""
+
 [colors]
 Background      = "#011627"
 Foreground      = "#bdc1c6"
@@ -22,3 +29,8 @@ Blue_Bright     = "#82aaff"
 Purple_Bright   = "#ae81ff"
 Cyan_Bright     = "#7fdbca"
 White_Bright    = "#d6deeb"
+
+[font]
+## Default font is JetBrainsMono and is installed by default
+##file = ""
+size = 14
