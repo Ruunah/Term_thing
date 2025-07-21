@@ -20,7 +20,7 @@ def load_font():
         else:
             family = QFontDatabase.applicationFontFamilies(font_id)
             if family:
-                return family[-1]
+                return family[0]
 
     elif font_path:
         if font_path in QFontDatabase().families():
@@ -54,7 +54,7 @@ class TerminalWindow(QWidget):
                 raise ValueError("Font size cannot be 0")
         except (ValueError, TypeError):
             size = 14
-            self.startup_message.append(f"/n Warning: value {size_str}, not valid, using default")
+            self.startup_messages.append(f"/n Warning: value {size_str}, not valid, using default")
 
         font = QFont(font_family, size)
 
