@@ -1,3 +1,4 @@
+import os
 import sys
 import tomllib
 from PySide4.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
@@ -79,4 +80,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
