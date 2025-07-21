@@ -1,4 +1,3 @@
-import os
 import sys
 import tomllib
 from PySide4.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
@@ -36,15 +35,28 @@ class TerminalWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.startup_messages = []
         self.initUI()
 
     def initUI(self):
-        font_family, msg = load_font()
+        result = load_font()
+        if isinstance(result, tuple):
+            font_family, msg = result
+            self.startup_messages.append(msg)
+        else:
+            font_family = result
+
+        size_str = config.get("font", {}).get("Size").strip()
+
             try:
-                font = QFont(font_family, config.get("font", {}).get("Size", "").strip())
-            except:
-                msg+=f"/n Warning: size {Size}, not valid, using default"
-                font = QFont(font_family, 14)
+                size = int(size_str)
+                if size == 0:
+                    raise ValueError("Font size cannot be 0")
+            except (ValueError, TypeError):
+                size = 14
+                startup_message.append(f"/n Warning: value {size_str}, not valid, using default")
+
+        font = QFont(font_family, size)
 
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.showFullScreen()
