@@ -14,10 +14,10 @@ def main():
                 command_name=command_input[0]
                 args=command_input[1:]
 
-                if command_input[0] in command_registry:
+                if command_name in command_registry:
                     command_execution()
 
-                if "exit" == command_input:
+                if "exit" == command_name:
                     clear()
                     print("Exiting...")
                     break
