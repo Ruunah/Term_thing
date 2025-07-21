@@ -1,9 +1,11 @@
 import subprocess
+from window.term import run as window
 from commands.clear import run as clear
 from commands import command_registry
 
 def main():
     clear()
+    window()
     while True:
             try:
                 command_input = input("-->").split()
