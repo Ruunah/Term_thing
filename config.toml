@@ -2,8 +2,8 @@
 ## Size only required if fullscreen is not active
 Size = "800x600"
 Fullscreen = "True"
-## Transparency goes from 1 to 0
-Transparency = ""
+## Opacity goes from 1 to 0
+Opacity = "0.85"
 
 [colors]
 Background      = "#011627"

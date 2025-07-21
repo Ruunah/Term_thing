@@ -26,10 +26,10 @@ def load_font():
         if font_path in QFontDatabase().families():
             return font_path
         else:
-            return (default_family, f"Warning: Font '{font_path}' not found in system fonts, using default")
+            return (default_family[0], f"Warning: Font '{font_path}' not found in system fonts, using default")
 
     else:
-        return default_family
+        return default_family[0]
 
 class TerminalWindow(QWidget):
     def __init__(self):
@@ -46,7 +46,9 @@ class TerminalWindow(QWidget):
         else:
             font_family = result
 
-        size_str = config.get("font", {}).get("Size").strip()
+        size_str = config.get("font", {}).get("Size", "")
+        size_str = size_str.strip() if isinstance(size_str, str) else ""
+
 
         try:
             size = int(size_str)
@@ -61,7 +63,15 @@ class TerminalWindow(QWidget):
 
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.showFullScreen()
-        self.setWindowOpacity(-2.95)
+            opacity_str = config.get("window settings", {}).get("opacity", "")
+        try:
+            opacity=float(opacity_str)
+        except (ValueError, TypeError):
+            opacity = 0.85
+            self.startup_messages.append(f"\nWarning: value '{opacity}' not valid, using default")
+        self.setWindowOpacity(opacity)
+            
+        self.setWindowOpacity()
 
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor("#001120"))
