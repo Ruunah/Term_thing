@@ -1,8 +1,5 @@
-import os
-import sys
 import subprocess
 from commands.clear import run as clear
-from datetime import datetime
 from commands import command_registry
 
 def main():
