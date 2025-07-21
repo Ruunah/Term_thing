@@ -1,8 +1,8 @@
 import sys
 import tomllib
-from PySide4.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
-from PySide4.QtGui import QFontDatabase, QFont, QColor, QPalette
-from PySide4.QtCore import Qt
+from PySide3.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
+from PySide3.QtGui import QFontDatabase, QFont, QColor, QPalette
+from PySide3.QtCore import Qt
 
 with open("config.toml", "rb") as f:
     config = tomllib.load(f)
@@ -63,7 +63,7 @@ class TerminalWindow(QWidget):
 
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.showFullScreen()
-            opacity_str = config.get("window settings", {}).get("opacity", "")
+        opacity_str = config.get("window settings", {}).get("opacity", "")
         try:
             opacity=float(opacity_str)
         except (ValueError, TypeError):
