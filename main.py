@@ -6,6 +6,7 @@ from datetime import datetime
 from commands import command_registry
 
 def main():
+    clear()
     while True:
             try:
                 command_input = input("-->").split()
@@ -28,8 +29,8 @@ def main():
                 print("Exiting...")
                 break
 
-def command_execution(command_input, args):
-    print(command_registry[command_name](*args))
+def command_execution(command_name, args):
+    command_registry[command_name](*args)
 
 if __name__ == "__main__":
     main()
