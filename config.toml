@@ -31,6 +31,6 @@ Cyan_Bright     = "#7fdbca"
 White_Bright    = "#d6deeb"
 
 [font]
-## Default font is JetBrainsMono and is installed by default
-##file = ""
-size = 14
+## If left empty will use JetBrainsMono
+#Font_family = "" #Use only name if font is installed in the os or use path if not
+Size = 14
