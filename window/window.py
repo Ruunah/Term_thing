@@ -48,14 +48,14 @@ def load_sets():
             return config.get(section).get(key)
         except Exception as e:
             failed_keys.append(f"{section}.{key}: {str(e)}")
-            return defaults[key]
+            return (defaults[key], "Default")
     # Window settings
-    Dimensions  = safe_get("window", "Dimensions")
-    Fullscreen  = safe_get("window", "Fullscreen")
-    Opacity     = safe_get("window", "Opacity")
+    Dimensions      = safe_get("window", "Dimensions")
+    Fullscreen      = safe_get("window", "Fullscreen")
+    Opacity         = safe_get("window", "Opacity")
     # Font settings
-    Font        = safe_get("font", "Font_Family")
-    Font_size   = safe_get("font", "Size")
+    Font            = safe_get("font", "Font_Family")
+    Font_size       = safe_get("font", "Size")
     # Color settings
     Background      = safe_get("colors", "Background")
     Foreground      = safe_get("colors", "Foreground")
@@ -89,26 +89,25 @@ def load_sets():
 
 def load_font():
     font_family = None
-    default_font_id = QFontDatabase.addApplicationFont("../fonts/JetBrainsMonoNerdFont-Medium.ttf")
-    default_family = QFontDatabase.applicationFontFamilies(default_font_id)
 
-    if font_path.lower().endswith((".ttf", ".otf")) and os.path.isfile(font_path):
-        font_id = QFontDatabase.addApplicationFont(font_path)
-        if 0 > font_id:
-            return (default_family[0], f"Error: Failed to load font at {font_path}, using default.")
-        else:
-            family = QFontDatabase.applicationFontFamilies(font_id)
-            if family:
-                return family[0]
-
-    elif font_path:
-        if font_path in QFontDatabase().families():
-            return font_path
-        else:
-            return (default_family[0], f"Warning: Font '{font_path}' not found in system fonts, using default")
-
+    if Font[1]:
+        return Font = QFontDatabase.applicationFontFamilies(default_font_id = QFontDatabase.addApplicationFont(Font[0]))
     else:
-        return default_family[0]
+        if Font.lower().endswith((".ttf", ".otf")) and os.path.isfile(Font):
+            font_id = QFontDatabase.addApplicationFont(Font)
+            if 0 > font_id:
+                return (Font = QFontDatabase.applicationFontFamilies(default_font_id = QFontDatabase.addApplicationFont("../fonts/JetBrainsMonoNerdFont-Medium.ttf")), f"Error: Failed to load font at {Font}, using default.")
+            else:
+                family = QFontDatabase.applicationFontFamilies(font_id)
+                if family:
+                    return family[0]
+
+        elif Font:
+            if Font in QFontDatabase().families():
+                return Font
+            else:
+                return (Font = QFontDatabase.applicationFontFamilies(default_font_id = QFontDatabase.addApplicationFont("../fonts/JetBrainsMonoNerdFont-Medium.ttf")), f"Warning: Font '{Font}' not found in system fonts, using default")
+
 
 class TerminalWindow(QWidget):
     def __init__(self):
@@ -125,33 +124,34 @@ class TerminalWindow(QWidget):
         else:
             font_family = result
 
-        size_str = config.get("font", {}).get("Size", "")
+        size_str = Font_size
         size_str = size_str.strip() if isinstance(size_str, str) else ""
 
-
+        # Set font size
         try:
             size = int(size_str)
             if size <= 0:
                 raise ValueError()
         except (ValueError, TypeError):
-            size = 14
+            size = defaults[Font_size]
             self.startup_messages.append(f"\nWarning: value '{size_str}' not valid, using default")
-
 
         font = QFont(font_family, size)
 
+        # Set Opacity
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.showFullScreen()
-        opacity_str = config.get("window settings", {}).get("opacity", "")
+        opacity_str = Opacity
         try:
             opacity=float(opacity_str)
         except (ValueError, TypeError):
-            opacity = 0.85
-            self.startup_messages.append(f"\nWarning: value '{opacity}' not valid, using default")
+            opacity = defaults[Opacity]
+            self.startup_messages.append(f"\nWarning: value '{opacity_str}' not valid, using default")
         self.setWindowOpacity(opacity)
             
         self.setWindowOpacity()
 
+        # Set Color palette
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor("#001120"))
         self.setPalette(palette)
