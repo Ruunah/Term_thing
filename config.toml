@@ -2,6 +2,12 @@
 ## Dimensions only required if fullscreen is not active
 Dimensions = "800x600"
 Fullscreen = "True"
+
+## Frame sets it so you have a window frame or not
+# Importand if not fullscreen as not "alt drag" function is implemented
+# If fullscreen frame will not be used
+Frame = "False"
+
 ## Opacity goes from 1 to 0
 Opacity = "0.85"
 
@@ -11,20 +17,23 @@ Font_family = "" #Use only name if font is installed in the os or use path if no
 Size = 14
 
 [colors]
+# Frame color if frame is true, hex or transparent 
+Frame_color     = "Transparent"
+ 
 Background      = "#011627"
 Foreground      = "#bdc1c6"
-Bold 	        = "#eeeeee"
-Cursor 	        = "#9ca1aa"
+Bold 	          = "#eeeeee"
+Cursor 	       = "#9ca1aa"
 Cursor_Text     = "#080808"
 Selection 	    = "#b2ceee"
 Selection_Text  = "#080808"
-Black   	    = "#1d3b53"
-Red     	    = "#fc514e"
-Green   	    = "#a1cd5e"
-Yellow  	    = "#e3d18a"
+Black   	       = "#1d3b53"
+Red     	       = "#fc514e"
+Green   	       = "#a1cd5e"
+Yellow  	       = "#e3d18a"
 Blue            = "#82aaff"
-Purple  	    = "#c792ea"
-Cyan    	    = "#7fdbca"
+Purple  	       = "#c792ea"
+Cyan    	       = "#7fdbca"
 White           = "#a1aab8"
 Black_Bright    = "#7c8f8f"
 Red_Bright      = "#ff5874"
