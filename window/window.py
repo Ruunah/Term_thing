@@ -49,38 +49,39 @@ def load_sets():
         except Exception as e:
             failed_keys.append(f"{section}.{key}: {str(e)}")
             return (defaults[key], "Default")
+    sets={
     # Window settings
-    Dimensions      = safe_get("window", "Dimensions")
-    Fullscreen      = safe_get("window", "Fullscreen")
-    Opacity         = safe_get("window", "Opacity")
+    Dimensions      : safe_get("window", "Dimensions")
+    Fullscreen      : safe_get("window", "Fullscreen")
+    Opacity         : safe_get("window", "Opacity")
     # Font settings
-    Font            = safe_get("font", "Font_Family")
-    Font_size       = safe_get("font", "Size")
+    Font            : safe_get("font", "Font_Family")
+    Font_size       : safe_get("font", "Size")
     # Color settings
-    Background      = safe_get("colors", "Background")
-    Foreground      = safe_get("colors", "Foreground")
-    Bold            = safe_get("colors", "Bold")
-    Cursor          = safe_get("colors", "Cursor")
-    Cursor_Text     = safe_get("colors", "Cursor_Text")
-    Selection       = safe_get("colors", "Selection")
-    Selection_Text  = safe_get("colors", "Selection_Text")
-    Black           = safe_get("colors", "Black")
-    Red             = safe_get("colors", "Red")
-    Green           = safe_get("colors", "Green")
-    Yellow          = safe_get("colors", "Yellow")
-    Blue            = safe_get("colors", "Blue")
-    Purple          = safe_get("colors", "Purple")
-    Cyan            = safe_get("colors", "Cyan")
-    White           = safe_get("colors", "White")
-    Black_Bright    = safe_get("colors", "Black_Bright")
-    Red_Bright      = safe_get("colors", "Red_Bright")
-    Green_Bright    = safe_get("colors", "Green_Bright")
-    Yellow_Bright   = safe_get("colors", "Yellow_Bright")
-    Blue_Bright     = safe_get("colors", "Blue_Bright")
-    Purple_Bright   = safe_get("colors", "Purple_Bright")
-    Cyan_Bright     = safe_get("colors", "Cyan_Bright")
-    White_Bright    = safe_get("colors", "White_Bright")
-
+    Background      : safe_get("colors", "Background")
+    Foreground      : safe_get("colors", "Foreground")
+    Bold            : safe_get("colors", "Bold")
+    Cursor          : safe_get("colors", "Cursor")
+    Cursor_Text     : safe_get("colors", "Cursor_Text")
+    Selection       : safe_get("colors", "Selection")
+    Selection_Text  : safe_get("colors", "Selection_Text")
+    Black           : safe_get("colors", "Black")
+    Red             : safe_get("colors", "Red")
+    Green           : safe_get("colors", "Green")
+    Yellow          : safe_get("colors", "Yellow")
+    Blue            : safe_get("colors", "Blue")
+    Purple          : safe_get("colors", "Purple")
+    Cyan            : safe_get("colors", "Cyan")
+    White           : safe_get("colors", "White")
+    Black_Bright    : safe_get("colors", "Black_Bright")
+    Red_Bright      : safe_get("colors", "Red_Bright")
+    Green_Bright    : safe_get("colors", "Green_Bright")
+    Yellow_Bright   : safe_get("colors", "Yellow_Bright")
+    Blue_Bright     : safe_get("colors", "Blue_Bright")
+    Purple_Bright   : safe_get("colors", "Purple_Bright")
+    Cyan_Bright     : safe_get("colors", "Cyan_Bright")
+    White_Bright    : safe_get("colors", "White_Bright")
+    }
     if failed_keys:
         print("Warning: Failed to load the following config keys:")
         for key in failed_keys:
@@ -117,6 +118,13 @@ class TerminalWindow(QWidget):
         self.initUI()
 
     def initUI(self):
+        result = load_sets()
+        if isinstance(result, tuple):
+            sets, msg = result
+            self.startup_messages.append(msg)
+        else:
+            sets = result
+            
         result = load_font()
         if isinstance(result, tuple):
             font_family, msg = result
@@ -124,8 +132,7 @@ class TerminalWindow(QWidget):
         else:
             font_family = result
 
-        size_str = Font_size
-        size_str = size_str.strip() if isinstance(size_str, str) else ""
+        size_str = sets[Font_size]
 
         # Set font size
         try:
@@ -141,7 +148,7 @@ class TerminalWindow(QWidget):
         # Set Opacity
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.showFullScreen()
-        opacity_str = Opacity
+        opacity_str = sets[Opacity]
         try:
             opacity=float(opacity_str)
         except (ValueError, TypeError):
