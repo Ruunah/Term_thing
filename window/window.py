@@ -8,74 +8,87 @@ with open("config.toml", "rb") as f:
     config = tomllib.load(f)
 
 defaults={
-    "Window_dimensions":"800x600"
-    "Fullscreen":"True"
-    "Opacity":"0.85"
+    "Window_dimensions":"800x600",
+    "Fullscreen":"True",
+    "Opacity":"0.85",
 
-    "Font":"../fonts/JetBrainsMonoNerdFont-Medium.ttf",
-    "FSize":"14",
+    "Font_family":"../fonts/JetBrainsMonoNerdFont-Medium.ttf",
+    "Size":"14",
 
-    "Background":"#011627"
-    "Foreground":"#bdc1c6"
-    "Bold":"#eeeeee"
-    "Cursor":"#9ca1aa"
-    "Cursor_Text":"#080808"
-    "Selection":"#b2ceee"
-    "Selection_Text":"#080808"
-    "Black":"#1d3b53"
-    "Red":"#fc514e"
-    "Green":"#a1cd5e"
-    "Yellow":"#e3d18a"
-    "Blue":"#82aaff"
-    "Purple":"#c792ea"
-    "Cyan":"#7fdbca"
-    "White":"#a1aab8"
-    "Black_Bright":"#7c8f8f"
-    "Red_Bright":"#ff5874"
-    "Green_Bright":"#21c7a8"
-    "Yellow_Bright":"#ecc48d"
-    "Blue_Bright":"#82aaff"
-    "Purple_Bright":"#ae81ff"
-    "Cyan_Bright":"#7fdbca"
-    "White_Bright":"#d6deeb"
+    "Background":"#011627",
+    "Foreground":"#bdc1c6",
+    "Bold":"#eeeeee",
+    "Cursor":"#9ca1aa",
+    "Cursor_Text":"#080808",
+    "Selection":"#b2ceee",
+    "Selection_Text":"#080808",
+    "Black":"#1d3b53",
+    "Red":"#fc514e",
+    "Green":"#a1cd5e",
+    "Yellow":"#e3d18a",
+    "Blue":"#82aaff",
+    "Purple":"#c792ea",
+    "Cyan":"#7fdbca",
+    "White":"#a1aab8",
+    "Black_Bright":"#7c8f8f",
+    "Red_Bright":"#ff5874",
+    "Green_Bright":"#21c7a8",
+    "Yellow_Bright":"#ecc48d",
+    "Blue_Bright":"#82aaff",
+    "Purple_Bright":"#ae81ff",
+    "Cyan_Bright":"#7fdbca",
+    "White_Bright":"#d6deeb",
 }
 
 def load_sets():
-    try:
-        Dimensions     = config.get("window").get("Dimensions")
-        Fullscreen     = config.get("window").get("Fullscreen")
-        Opacity        = config.get("window").get("Opacity")
+    failed_keys = []
 
-        Font           = config.get("font").get("Font_Family")
-        Font_size      = config.get("font").get("Size")
+    def safe_get(section, key):
+        try:
+            return config.get(section).get(key)
+        except Exception as e:
+            failed_keys.append(f"{section}.{key}: {str(e)}")
+            return defaults[key]
+    # Window settings
+    Dimensions  = safe_get("window", "Dimensions")
+    Fullscreen  = safe_get("window", "Fullscreen")
+    Opacity     = safe_get("window", "Opacity")
+    # Font settings
+    Font        = safe_get("font", "Font_Family")
+    Font_size   = safe_get("font", "Size")
+    # Color settings
+    Background      = safe_get("colors", "Background")
+    Foreground      = safe_get("colors", "Foreground")
+    Bold            = safe_get("colors", "Bold")
+    Cursor          = safe_get("colors", "Cursor")
+    Cursor_Text     = safe_get("colors", "Cursor_Text")
+    Selection       = safe_get("colors", "Selection")
+    Selection_Text  = safe_get("colors", "Selection_Text")
+    Black           = safe_get("colors", "Black")
+    Red             = safe_get("colors", "Red")
+    Green           = safe_get("colors", "Green")
+    Yellow          = safe_get("colors", "Yellow")
+    Blue            = safe_get("colors", "Blue")
+    Purple          = safe_get("colors", "Purple")
+    Cyan            = safe_get("colors", "Cyan")
+    White           = safe_get("colors", "White")
+    Black_Bright    = safe_get("colors", "Black_Bright")
+    Red_Bright      = safe_get("colors", "Red_Bright")
+    Green_Bright    = safe_get("colors", "Green_Bright")
+    Yellow_Bright   = safe_get("colors", "Yellow_Bright")
+    Blue_Bright     = safe_get("colors", "Blue_Bright")
+    Purple_Bright   = safe_get("colors", "Purple_Bright")
+    Cyan_Bright     = safe_get("colors", "Cyan_Bright")
+    White_Bright    = safe_get("colors", "White_Bright")
 
-        Background     = config.get("colors").get("Background")
-        Foreground     = config.get("colors").get("Foreground")
-        Bold           = config.get("colors").get("Bold")
-        Cursor         = config.get("colors").get("Cursor")
-        Cursor_Text    = config.get("colors").get("Cursor_Text")
-        Selection      = config.get("colors").get("Selection")
-        Selection_Text = config.get("colors").get("Selection_Text")
-        Black          = config.get("colors").get("Black")
-        Red            = config.get("colors").get("Red")
-        Green          = config.get("colors").get("Green")
-        Yellow         = config.get("colors").get("Yellow")
-        Blue           = config.get("colors").get("Blue")
-        Purple         = config.get("colors").get("Purple")
-        Cyan           = config.get("colors").get("Cyan")
-        White          = config.get("colors").get("White")
-        Black_Bright   = config.get("colors").get("Black_Bright")
-        Red_Bright     = config.get("colors").get("Red_Bright")
-        Green_Bright   = config.get("colors").get("Green_Bright")
-        Yellow_Bright  = config.get("colors").get("Yellow_Bright")
-        Blue_Bright    = config.get("colors").get("Blue_Bright")
-        Purple_Bright  = config.get("colors").get("Purple_Bright")
-        Cyan_Bright    = config.get("colors").get("Cyan_Bright")
-        White_Bright   = config.get("colors").get("White_Bright")
+    if failed_keys:
+        print("Warning: Failed to load the following config keys:")
+        for key in failed_keys:
+            print(f"  - {key}")
+
 
 def load_font():
     font_family = None
-    font_path = config.get("font", {}).get("Font_family", "").strip()
     default_font_id = QFontDatabase.addApplicationFont("../fonts/JetBrainsMonoNerdFont-Medium.ttf")
     default_family = QFontDatabase.applicationFontFamilies(default_font_id)
 
