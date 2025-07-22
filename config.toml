@@ -3,10 +3,13 @@
 Dimensions = "800x600"
 Fullscreen = "True"
 
-## Frame sets it so you have a window frame or not
-# Importand if not fullscreen as not "alt drag" function is implemented
+## Frame sets it so you have a window frame or window decorations if you use windows
+# Importand if not fullscreen, as no "alt drag" function is implemented
 # If fullscreen frame will not be used
 Frame = "False"
+
+# If frame = True then this will appear
+Title = ""
 
 ## Opacity goes from 1 to 0
 Opacity = "0.85"
