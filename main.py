@@ -1,5 +1,5 @@
 import subprocess
-from window.term import run as window
+from window.window import main as window
 from commands.clear import run as clear
 from commands import command_registry
 

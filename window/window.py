@@ -7,6 +7,72 @@ from PySide4.QtCore import Qt
 with open("config.toml", "rb") as f:
     config = tomllib.load(f)
 
+defaults={
+    "Window_dimensions":"800x600"
+    "Fullscreen":"True"
+    "Opacity":"0.85"
+
+    "Font":"../fonts/JetBrainsMonoNerdFont-Medium.ttf",
+    "FSize":"14",
+
+    "Background":"#011627"
+    "Foreground":"#bdc1c6"
+    "Bold":"#eeeeee"
+    "Cursor":"#9ca1aa"
+    "Cursor_Text":"#080808"
+    "Selection":"#b2ceee"
+    "Selection_Text":"#080808"
+    "Black":"#1d3b53"
+    "Red":"#fc514e"
+    "Green":"#a1cd5e"
+    "Yellow":"#e3d18a"
+    "Blue":"#82aaff"
+    "Purple":"#c792ea"
+    "Cyan":"#7fdbca"
+    "White":"#a1aab8"
+    "Black_Bright":"#7c8f8f"
+    "Red_Bright":"#ff5874"
+    "Green_Bright":"#21c7a8"
+    "Yellow_Bright":"#ecc48d"
+    "Blue_Bright":"#82aaff"
+    "Purple_Bright":"#ae81ff"
+    "Cyan_Bright":"#7fdbca"
+    "White_Bright":"#d6deeb"
+}
+
+def load_sets():
+    try:
+        Dimensions     = config.get("window").get("Dimensions")
+        Fullscreen     = config.get("window").get("Fullscreen")
+        Opacity        = config.get("window").get("Opacity")
+
+        Font           = config.get("font").get("Font_Family")
+        Font_size      = config.get("font").get("Size")
+
+        Background     = config.get("colors").get("Background")
+        Foreground     = config.get("colors").get("Foreground")
+        Bold           = config.get("colors").get("Bold")
+        Cursor         = config.get("colors").get("Cursor")
+        Cursor_Text    = config.get("colors").get("Cursor_Text")
+        Selection      = config.get("colors").get("Selection")
+        Selection_Text = config.get("colors").get("Selection_Text")
+        Black          = config.get("colors").get("Black")
+        Red            = config.get("colors").get("Red")
+        Green          = config.get("colors").get("Green")
+        Yellow         = config.get("colors").get("Yellow")
+        Blue           = config.get("colors").get("Blue")
+        Purple         = config.get("colors").get("Purple")
+        Cyan           = config.get("colors").get("Cyan")
+        White          = config.get("colors").get("White")
+        Black_Bright   = config.get("colors").get("Black_Bright")
+        Red_Bright     = config.get("colors").get("Red_Bright")
+        Green_Bright   = config.get("colors").get("Green_Bright")
+        Yellow_Bright  = config.get("colors").get("Yellow_Bright")
+        Blue_Bright    = config.get("colors").get("Blue_Bright")
+        Purple_Bright  = config.get("colors").get("Purple_Bright")
+        Cyan_Bright    = config.get("colors").get("Cyan_Bright")
+        White_Bright   = config.get("colors").get("White_Bright")
+
 def load_font():
     font_family = None
     font_path = config.get("font", {}).get("Font_family", "").strip()
