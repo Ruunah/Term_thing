@@ -46,3 +46,6 @@ Blue_Bright     = "#82aaff"
 Purple_Bright   = "#ae81ff"
 Cyan_Bright     = "#7fdbca"
 White_Bright    = "#d6deeb"
+
+[term_stuff]
+prompt = "-->"
