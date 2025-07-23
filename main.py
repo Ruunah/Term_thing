@@ -12,7 +12,7 @@ def main():
                 command_name=command_input[0]
                 args=command_input[1:]
 
-                elif not command_input:
+                if not command_input:
                     continue
 
                 if command_name in command_registry:
