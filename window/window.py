@@ -1,4 +1,5 @@
 import re
+import os
 import sys
 import tomllib
 from PySide6.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
