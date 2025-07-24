@@ -3,9 +3,10 @@ import os
 import sys
 import tomllib
 from PySide6.QtCore import Qt
+from window.QTermEdit import QTermEdit
 from PySide6.QtGui import QFontDatabase, QFont
-from PySide6.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
-from QTermEdit import QTermEdit
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
+
 
 # Imports Settings from config.toml
 with open("config.toml", "rb") as f:
@@ -263,10 +264,6 @@ class TerminalWindow(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
         self.term_edit.setFont(font)
-
-        # Cursor stuff
-        self.term_edit.setCursorWidth(0)
-        self.term_edit.setLineWrapMode(QTermEdit.LineWrapMode.NoWrap)
 
 def main():
     app = QApplication(sys.argv)

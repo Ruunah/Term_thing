@@ -1,28 +1,36 @@
 from PySide6.QtCore import Qt, QProcess, QEvent
 from PySide6.QtGui import QFontDatabase, QFont, QTextCursor, QTextOption
 from PySide6.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
+from commands import command_registry
 
 
 class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+
+        ## Font setting
         font = QFont(parent.font())
         font.setStyleStrategy(QFont.PreferAntialias)
         font.setStyleHint(QFont.Monospace)
-
         text_option = self.document().defaultTextOption()
         text_option.setFlags(text_option.flags() | QTextOption.IncludeTrailingSpaces)
         self.document().setDefaultTextOption(text_option)
 
+        self.setCursorWidth(0)
         self.setLineWrapMode(QTextEdit.NoWrap)
         self.setReadOnly(False)
-        self.prompt = "--> "
-        self.insertPlainText(self.prompt)
         self.input_buffer = ""
         self.history = []
         self.history_index = -1
         self.setFont(font)
+
+
+        if parent.startup_messages:
+            self.insertPlainText(str(parent.startup_messages)+"\n")
+
+        self.prompt = "--> "
+        self.insertPlainText(self.prompt)
 
         self.installEventFilter(self)
 
@@ -32,12 +40,23 @@ class QTermEdit(QTextEdit):
             text = event.text()
 
             if key in (Qt.Key_Return, Qt.Key_Enter):
-                command = self.input_buffer.strip()
+                if len(self.input_buffer.split()) > 1:
+                   cmd = self.input_buffer.split() 
+                   command = cmd[0]
+                   args = cmd[1:]
+                   self.run_command(command_registry, self, command, *args)
+
+                elif len(self.input_buffer.split())> 0:
+                    command = self.input_buffer.split()
+                    self.run_command(command_registry, self, command)
+
+                else:
+                    self.insertPlainText("\n")
+
                 self.insertPlainText("")  # Move to next line
-                self.run_command(command)
                 self.insertPlainText(self.prompt)
+                self.history.append(self.input_buffer)
                 self.input_buffer = ""
-                self.history.append(command)
                 self.history_index = len(self.history)
                 return True
 
@@ -80,17 +99,10 @@ class QTermEdit(QTextEdit):
         self.input_buffer = text
         self.insertPlainText(text)
 
-    def run_command(self, command):
-        # Define your custom commands here
-        if command == "hello":
-            self.insertPlainText("\n"+"Hello! This is your custom command terminal."+"\n")
-        elif command == "help":
-            self.insertPlainText("\n"+"Available commands: hello, help, clear"+"\n")
-        elif command == "clear":
-            self.clear()
-        elif command == "":
-            self.insertPlainText("\n")
-            pass  # Ignore empty command
-        else:
-            self.insertPlainText("\n"+f"Unknown command: {command}"+"\n")
+    def run_command(self, command_registry, command, args=""):
+        if command in command_registry:
+            if isinstance(args, str):
+                command_registry[command](self, args)
+            else:
+                command_registry[command](self, *args)
 
