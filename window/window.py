@@ -5,6 +5,7 @@ import tomllib
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
+from QTermEdit import QTermEdit
 
 # Imports Settings from config.toml
 with open("config.toml", "rb") as f:
@@ -22,7 +23,7 @@ defaults={
 
 
         # Font and font size
-        "Font_family"     : "../fonts/JetBrainsMonoNerdFont-Medium.ttf",
+        "Font_family"     : "font/JetBrainsMonoNerdFont-Medium.ttf",
         "Font_size"       : 14,
 
         # Colorscheme
@@ -120,31 +121,37 @@ def load_sets():
 
 # Font loader, bc its loang and I dont want it in the middle of the code
 def load_font(defaults, sets, fails):
+    default=str(defaults["Font_family"])
+    sett=str(sets["Font_family"])
+
 
     # Error just defaults so its easyer
     if len(fails) > 1 and f"font.{sets['Font_family']}" in fails[1]:
         return QFontDatabase.applicationFontFamilies(default_font_id = QFontDatabase.addApplicationFont(defaults["Font_family"]))
 
     else:
-        if sets["Font_family"].lower().endswith((".ttf", ".otf")) and os.path.isfile(sets["Font_family"]):
-            font_id = QFontDatabase.addApplicationFont(sets["Font_family"])
-            if 0 > font_id:
-                return QFontDatabase.applicationFontFamilies(default_font_id = QFontDatabase.addApplicationFont(defaults["Font_family"]))
-
-            else:
-                family = QFontDatabase.applicationFontFamilies(font_id)
-                if family:
-                    return family[0]
+        if sets["Font_family"] == None:
+            return QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(defaults["Font_family"]))
+        else:
+            if sets["Font_family"].lower().endswith((".ttf", ".otf")) and os.path.isfile(sets["Font_family"]):
+                font_id = QFontDatabase.addApplicationFont(sets["Font_family"])
+                if 0 > font_id:
+                    return QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(defaults["Font_family"]))
 
                 else:
-                    return QFontDatabase.applicationFontFamilies(default_font_id = QFontDatabase.addApplicationFont(defaults["Font_family"]))
+                    family = QFontDatabase.applicationFontFamilies(font_id)
+                    if family:
+                        return family[0]
 
-        elif sets["Font_family"]:
-            if sets["Font_family"] in QFontDatabase().families():
-                return sets["Font_family"]
+                    else:
+                        return QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(defaults["Font_family"]))
 
-            else:
-                return QFontDatabase.applicationFontFamilies(default_font_id = QFontDatabase.addApplicationFont(defaults["Font_family"]))
+            elif sets["Font_family"]:
+                if sets["Font_family"] in QFontDatabase.families():
+                    return sets["Font_family"]
+
+                else:
+                    return QFontDatabase.applicationFontFamilies(QFontDatabase.addApplicationFont(defaults["Font_family"]))
 
 # Color loader
 def load_color(section, defaults, sets, fails):
@@ -168,7 +175,7 @@ class TerminalWindow(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.text_edit = QTextEdit()
+        self.term_edit = QTermEdit(self)
         result = load_sets()
         if isinstance(result, tuple):
             sets, msg = result
@@ -221,7 +228,8 @@ class TerminalWindow(QWidget):
         # Actually set the font
         font = QFont(sets["Font_family"], sets["Font_size"])
         font.setStyleStrategy(QFont.PreferAntialias)
-        self.text_edit.setFont(font)
+        self.setFont(font)
+        self.term_edit.setFont(font)
 
         ## Colors
         # Color Pallete
@@ -237,7 +245,7 @@ class TerminalWindow(QWidget):
                 margin : 0px 0px 0px 0px;
             }}
 
-            QTextEdit{{
+            QTermEdit{{
                 background-color : {load_color('Background', defaults, sets, fails)};
                 border : 1px solid {load_color('Cursor', defaults, sets, fails)};
                 color : {load_color('Foreground', defaults, sets, fails)};
@@ -251,14 +259,14 @@ class TerminalWindow(QWidget):
 
         # Layout
         layout = QVBoxLayout()
-        layout.addWidget(self.text_edit)
+        layout.addWidget(self.term_edit)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
-        self.text_edit.setFont(font)
+        self.term_edit.setFont(font)
 
         # Cursor stuff
-        self.text_edit.setCursorWidth(0)
-        self.text_edit.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)
+        self.term_edit.setCursorWidth(0)
+        self.term_edit.setLineWrapMode(QTermEdit.LineWrapMode.NoWrap)
 
 def main():
     app = QApplication(sys.argv)

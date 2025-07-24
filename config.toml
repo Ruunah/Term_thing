@@ -16,7 +16,7 @@ Opacity = "0.85"
 
 [font]
 ## If left empty will use JetBrainsMono
-Font_family = "" #Use only name if font is installed in the os or use path if not
+Font_family = "font/JetBrainsMonoNerdFont-Medium.ttf" #Use only name if font is installed in the os or use path if not
 Font_size = 14
 
 [colors]
