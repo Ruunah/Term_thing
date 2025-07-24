@@ -44,11 +44,11 @@ class QTermEdit(QTextEdit):
                    cmd = self.input_buffer.split() 
                    command = cmd[0]
                    args = cmd[1:]
-                   self.run_command(command_registry, self, command, *args)
+                   self.run_command(self, command_registry, command, *args)
 
                 elif len(self.input_buffer.split())> 0:
-                    command = self.input_buffer.split()
-                    self.run_command(command_registry, self, command)
+                    command = self.input_buffer.strip()
+                    self.run_command(command_registry, command)
 
                 else:
                     self.insertPlainText("\n")
@@ -103,6 +103,14 @@ class QTermEdit(QTextEdit):
         if command in command_registry:
             if isinstance(args, str):
                 command_registry[command](self, args)
+
             else:
                 command_registry[command](self, *args)
+
+        else:
+            if command:
+                self.insertPlainText("\nCommand Not found")
+            else:
+                self.insertPlainText("\n")
+
 

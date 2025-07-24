@@ -2,8 +2,7 @@ from commands import command_registry
 
 def run(self, args=""):
     if not args:
-        bleb = "\n"
+        bleb="\n"
         for key in command_registry:
-            bleb += str(command_registry[key])+"\n"
-        print(self.insertPlainText(bleb))
+            bleb += f"{key}\n"
         return self.insertPlainText(bleb)
