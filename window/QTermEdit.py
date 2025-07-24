@@ -8,7 +8,6 @@ class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-
         ## Font setting
         font = QFont(parent.font())
         font.setStyleStrategy(QFont.PreferAntialias)
@@ -44,7 +43,7 @@ class QTermEdit(QTextEdit):
                    cmd = self.input_buffer.split() 
                    command = cmd[0]
                    args = cmd[1:]
-                   self.run_command(self, command_registry, command, *args)
+                   self.run_command(command_registry, command, args)
 
                 elif len(self.input_buffer.split())> 0:
                     command = self.input_buffer.strip()
@@ -107,10 +106,10 @@ class QTermEdit(QTextEdit):
             else:
                 command_registry[command](self, *args)
 
+        elif command:
+            self.insertPlainText("\nCommand Not found")
+
         else:
-            if command:
-                self.insertPlainText("\nCommand Not found")
-            else:
-                self.insertPlainText("\n")
+            self.insertPlainText("\n")
 
 
