@@ -23,6 +23,8 @@ class VFS:
             for folder in subfolders[key]:
                 path=os.path.join(self.root, key, folder)
                 os.makedirs(path, exist_ok=True)
+
+    def 
 def main():
     vfs = VFS()
 
