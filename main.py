@@ -1,6 +1,5 @@
-from utils import window.main as window
-from utils import vfs.main as vfs
+from utils import module_registry
 
 if __name__ == "__main__":
-    vfs()
-    window()
+    module_registry["window.window"]()
+    module_registry["vfs.vfs"]()
