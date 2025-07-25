@@ -1,7 +1,8 @@
 import os
-import importlib
 import sys
+import importlib
 
+module_dir_registry = {}
 module_registry = {}
 
 base_path = os.path.dirname(__file__)
@@ -22,7 +23,11 @@ for root, dirs, files in os.walk(base_path):
             except Exception as e:
                 print(f"Failed to load {full_module_name}: {e}")
 
-for name in module_registry:
+for name in os.listdir(base_path):
+    if os.path.isdir(os.path.join(base_path, name)) and name != "__pycache__":
+        module_dir_registry[name] = []
+
+for name in os.listdir(base_path):
     for other in module_registry:
         if name != other and other.startswith(name + "."):
-            if 
+            module_dir_registry[name].append(module_registry[other])

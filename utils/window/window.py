@@ -22,7 +22,6 @@ defaults={
         "Frame"           : False,
         "Title"           : "",
 
-
         # Font and font size
         "Font_family"     : "font/JetBrainsMonoNerdFont-Medium.ttf",
         "Font_size"       : 14,

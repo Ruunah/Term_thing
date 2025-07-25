@@ -1,0 +1,64 @@
+version = 3
+
+[transient_prompt]
+  template = '<#61AFEF,transparent></><transparent,#61AFEF>{{ .Folder }}</><#61AFEF,transparent> </>'
+  foreground = '#ffffff'
+  background = '#ffafd2'
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+
+  [[blocks.segments]]
+    template = '╭─'
+    foreground = '#ffffff'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+  [[blocks.segments]]
+    template = ''
+    foreground = '#011627'
+    background = '#61AFEF'
+    type = 'text'
+    style = 'plain'
+
+  [[blocks.segments]]
+    leading_diamond = ''
+    foreground = '#011627'
+    background = '#61AFEF'
+    type = 'os'
+    style = 'diamond'
+
+  [[blocks.segments]]
+    template = '{{.UserName }} '
+    foreground = '#011627'
+    powerline_symbol = ''
+    background = '#61AFEF'
+    type = 'session'
+    style = 'powerline'
+
+  [[blocks.segments]]
+    foreground = '#011627'
+    powerline_symbol = ''
+    background = '#ffafd2'
+    type = 'path'
+    style = 'powerline'
+
+    [blocks.segments.properties]
+      folder_icon = '󰉋'
+      folder_separator_icon = ' ❯ '
+      home_icon = ''
+      style = 'agnoster_full'
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    template = '╰─'
+    foreground = '#ffffff'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'

@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt, QProcess, QEvent
 from PySide6.QtGui import QFontDatabase, QFont, QTextCursor, QTextOption
 from PySide6.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
 from commands import command_registry
-from utils import module_registry[vfs]
+from utils import module_dir_registry
 
 
 class QTermEdit(QTextEdit):
@@ -29,7 +29,7 @@ class QTermEdit(QTextEdit):
         if parent.startup_messages:
             self.insertPlainText(str(parent.startup_messages)+"\n")
 
-        self.prompt = set_prompt()
+        self.prompt = "-->"
         self.insertPlainText(self.prompt)
 
         self.installEventFilter(self)
