@@ -107,7 +107,7 @@ class QTermEdit(QTextEdit):
                 command_registry[command](self, *args)
 
         elif command:
-            self.insertPlainText("\nCommand Not found")
+            self.insertPlainText("\nCommand Not found\n")
 
         else:
             self.insertPlainText("\n")

@@ -3,7 +3,7 @@ import os
 import sys
 import tomllib
 from PySide6.QtCore import Qt
-from window.QTermEdit import QTermEdit
+from utils.window.QTermEdit import QTermEdit
 from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 
