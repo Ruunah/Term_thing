@@ -2,8 +2,7 @@ from PySide6.QtCore import Qt, QProcess, QEvent
 from PySide6.QtGui import QFontDatabase, QFont, QTextCursor, QTextOption
 from PySide6.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
 from commands import command_registry
-from utils import module_dir_registry
-
+from utils import module_registry, module_dir_registry
 
 class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
@@ -112,5 +111,3 @@ class QTermEdit(QTextEdit):
 
         else:
             self.insertPlainText("\n")
-
-

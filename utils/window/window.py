@@ -207,10 +207,10 @@ class TerminalWindow(QWidget):
                 except ValueError:
                     pass
 
-                try:
-                    self.setWindowOpacity(float(sets["Opacity"]))
-                except (ValueError, TypeError):
-                    self.setWindowOpacity(float(defaults["Opacity"]))
+        try:
+            self.setWindowOpacity(float(sets["Opacity"]))
+        except (ValueError, TypeError):
+            self.setWindowOpacity(float(defaults["Opacity"]))
 
         ## Font
         # Font Size
