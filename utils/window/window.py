@@ -171,6 +171,7 @@ def load_color(section, defaults, sets, fails):
 class TerminalWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.vfs = vfs
         self.startup_messages = []
         self.initUI()
 

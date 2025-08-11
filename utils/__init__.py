@@ -25,9 +25,9 @@ for root, dirs, files in os.walk(base_path):
 
 for name in os.listdir(base_path):
     if os.path.isdir(os.path.join(base_path, name)) and name != "__pycache__":
-        module_dir_registry[name] = []
+        module_dir_registry[str(name)] = {}
 
 for name in os.listdir(base_path):
     for other in module_registry:
         if name != other and other.startswith(name + "."):
-            module_dir_registry[name].append(module_registry[other])
+            module_dir_registry[name][(other[:len(name)])]=module_registry[other]
