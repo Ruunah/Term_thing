@@ -8,6 +8,9 @@ class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        ## Import vfs
+        self.vfs = parent.vfs
+
         ## Font setting
         font = QFont(parent.font())
         font.setStyleStrategy(QFont.PreferAntialias)
@@ -43,6 +46,8 @@ class QTermEdit(QTextEdit):
                    cmd = self.input_buffer.split() 
                    command = cmd[0]
                    args = cmd[1:]
+                   if len(args)<=1:
+                       args=str(args)
                    self.run_command(command_registry, command, args)
 
                 elif len(self.input_buffer.split())> 0:

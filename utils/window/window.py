@@ -169,7 +169,7 @@ def load_color(section, defaults, sets, fails):
 
 
 class TerminalWindow(QWidget):
-    def __init__(self):
+    def __init__(self, vfs):
         super().__init__()
         self.vfs = vfs
         self.startup_messages = []
@@ -265,11 +265,8 @@ class TerminalWindow(QWidget):
         self.setLayout(layout)
         self.term_edit.setFont(font)
 
-def main():
+def main(vfs):
     app = QApplication(sys.argv)
-    window = TerminalWindow()
+    window = TerminalWindow(vfs)
     window.show()
     sys.exit(app.exec())
-
-if __name__ == "__main__":
-    main()

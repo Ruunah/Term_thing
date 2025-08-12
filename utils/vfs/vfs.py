@@ -3,7 +3,7 @@ import pathlib
 
 class VFS:
     def __init__(self, root="~/.vfs_root"):
-        self.root = os.path.expanduser(root)
+        self.root = pathlib.Path(root).expanduser()
         if not os.path.exists(self.root):
             self._initialize_root()
 
@@ -26,6 +26,3 @@ class VFS:
 def main():
     vfs = VFS()
     return vfs
-
-if __name__ == "__main__":
-    main()

@@ -1,5 +1,5 @@
 def run(self, args):
     if args:
-        return self.insertPlainText("\n"+str(args)+"\n")
+        self.insertPlainText("\n"+str(args)+"\n")
     else:
-        return self.insertPlainText("\nNo arguments input\n")
+        self.insertPlainText("\nNo arguments input\n")
