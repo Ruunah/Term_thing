@@ -135,8 +135,7 @@ class QTermEdit(QTextEdit):
             cwd = self.vfs.cwd.relative_to(self.vfs.root)
             
         
-        prompt=f"<span style='color:#ffffff; background-color:{bg_color}';>╭─</span>"
-        prompt+="<span style='color:#61AFEF; background-color:#011627> </span>"
-        prompt+="<span style='color:ffafd2; background-color:#011627></span>"
+        prompt=f"""
+        <span style='color:#ffffff; background-color:{bg_color}';>╭─</span><span style='color:#61AFEF; background-color:{bg_color}';></span><span style='color:#011627; background-color:#61AFEF';>  </span><span style='color:#61AFEF; background-color:#ffafd2';></span>"""
 
         return prompt

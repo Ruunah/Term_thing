@@ -20,7 +20,7 @@ defaults={
 
         # Font and font size
         "Font_family"     : "font/JetBrainsMonoNerdFont-Medium.ttf",
-        "Font_size"       : 12,
+        "Font_size"       : 14,
 
         # Colorscheme
         "Frame_color"     : "Transparent",

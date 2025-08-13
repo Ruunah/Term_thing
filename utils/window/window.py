@@ -5,9 +5,16 @@ import tomllib
 from PySide6.QtCore import Qt
 from utils.window.QTermEdit import QTermEdit
 from PySide6.QtGui import QFontDatabase, QFont
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QGraphicsOpacityEffect
 from utils.window.loads import defaults, load_sets, load_font, load_color
 
+def hex_to_rgb(color: str, opacity=0.85) -> str:
+    color = color.strip().lstrip("#")
+
+    try:
+        opacity=float(opacity)
+        if not(0.0 <= opacity <= 1.0):
+            
 
 class TerminalWindow(QWidget):
     def __init__(self, vfs):
@@ -49,10 +56,20 @@ class TerminalWindow(QWidget):
                 except ValueError:
                     pass
 
+        if 0.0 <= sets["Opacity"] <= 1.0:
+
         try:
-            self.setWindowOpacity(float(sets["Opacity"]))
+            if sets["Opacity"] != 0:
+                self.setAttribute(Qt.WA_TranslucentBackground)
+                opacity_effect = QGraphicsOpacityEffect(self)
+                opacity_effect.setOpacity(float(sets["Opacity"]))
+                self.setGraphicsEffect(opacity_effect)
+
+
         except (ValueError, TypeError):
-            self.setWindowOpacity(float(defaults["Opacity"]))
+            opacity_effect = QGraphicsOpacityEffect(self)
+            opacity_effect.setOpacity(float(defaults["Opacity"]))
+            self.setGraphicsEffect(opacity_effect)
 
         ## Font
         # Font Size
