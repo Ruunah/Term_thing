@@ -16,7 +16,7 @@ prompt_defaults={
 
         # Font and font size
         "Font_family"     : "font/JetBrainsMonoNerdFont-Medium.ttf",
-        "Font_size"       : 14,
+        "Font_size"       : 12,
 
         # Colorscheme
         "Frame_color"     : "Transparent",
@@ -163,49 +163,6 @@ def load_color(section, defaults, sets, fails):
 
 
 
-#################################################################################################################################
-#################################################################################################################################
-#################################################################################################################################
-
-
-# Imports Settings from config.toml
-with open("prompt.toml", "rb") as g:
-    config = tomllib.load(g)
-
-# Loads defaults outide of user space because I dont trust myself, imagine users
-prompt_Defaults={
-
-        }
-
-# User settings
-def load_Prompt_sets(sets)):
-    failed=[]
-
-    # Function to solve errors from user settings
-    def safe_get(sets, section, key):
-        try:
-            if config.get(section).get(key) == "transparent":
-                return sets["Background"]
-
-            else:
-                return config.get(section).get(key)
-
-        except (Exception):
-            failed.append(f"{section}.{key}")
-        return(prompt_defaults[key])
-
-    # Importing sets
-    prompt_sets={
-
-            }
-
-    if failed:
-        prompt_fails=["Warning: Failed to load the following prompt keys: "]
-        keys=[]
-        for i in range(len(failed)):
-            keys+=failed[i]
-        prompt_fails+=keys
-        return (prompt_sets, prompt_fails)
-
-    else:
-        return prompt_sets
+######################################################################################################################################################################################
+######################################################################################################################################################################################
+######################################################################################################################################################################################

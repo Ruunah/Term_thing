@@ -3,6 +3,20 @@ from PySide6.QtGui import QFontDatabase, QFont, QTextCursor, QTextOption
 from PySide6.QtWidgets import QApplication, QTextEdit, QWidget, QVBoxLayout
 from commands import command_registry
 from utils import module_registry, module_dir_registry
+from utils.window.loads import defaults, load_sets
+
+sets = load_sets(defaults)
+
+def write_segment(text, fg_color, bg_color=None):
+    fmt = QTextCharFormat()
+    fmt.setForeground(QColor(fg_color))
+    cursor.setCharFormat(fmt)
+    cursor.insertText(text)
+
+def write_prompt(self):
+    """<span style='color:#ffffff; background-color:sets["Background"]';>╭─</span><span style='color:#011627; background-color:#61AFEF></span>"""
+    )
+    self.prompt =("", "#61AFEF", "#011627")
 
 class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
@@ -38,7 +52,7 @@ class QTermEdit(QTextEdit):
 
             elif self.vfs.cwd.is_related_to(self.vfs.home):
                 relative = self.vfs.cwd.relative_to(self.vfs.home)
-                self.prompt.path = relative
+                self.prompt.path = f" {str(relative)}"
         
             else:
                 relative = self.vfs.cwd.relative_to(self.vfs.root)
