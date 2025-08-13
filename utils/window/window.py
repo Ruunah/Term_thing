@@ -8,7 +8,7 @@ from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from utils.window.loads import defaults, load_sets, load_font, load_color
 
-sets = load_sets()
+sets = load_sets(defaults)
 
 class TerminalWindow(QWidget):
     def __init__(self, vfs):

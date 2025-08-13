@@ -7,21 +7,11 @@ from utils.window.loads import defaults, load_sets
 
 sets = load_sets(defaults)
 
-def write_segment(text, fg_color, bg_color=None):
-    fmt = QTextCharFormat()
-    fmt.setForeground(QColor(fg_color))
-    cursor.setCharFormat(fmt)
-    cursor.insertText(text)
-
-def write_prompt(self):
-    """<span style='color:#ffffff; background-color:sets["Background"]';>╭─</span><span style='color:#011627; background-color:#61AFEF></span>"""
-    )
-    self.prompt =("", "#61AFEF", "#011627")
 
 class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
-
+              
         ## Import vfs
         self.vfs = parent.vfs
 
@@ -42,25 +32,9 @@ class QTermEdit(QTextEdit):
         self.setFont(font)
         if parent.startup_messages:
             self.insertPlainText(str(parent.startup_messages)+"\n")
-
-        def update_prompt(self):
-            if self.vfs.cwd == self.vfs.root:
-                self.prompt.path = "root"
-
-            elif self.vfs.cwd == self.vfs.home:
-                self.prompt.path = ""
-
-            elif self.vfs.cwd.is_related_to(self.vfs.home):
-                relative = self.vfs.cwd.relative_to(self.vfs.home)
-                self.prompt.path = f" {str(relative)}"
-        
-            else:
-                relative = self.vfs.cwd.relative_to(self.vfs.root)
-                self.prompt.path = relative
-
-        update_prompt(self)
-        
-        self.insertPlainText(self.prompt)
+       
+        prompt = self.setPrompt(sets["Background"])
+        self.insertHtml(prompt)
 
         self.installEventFilter(self)
     
@@ -143,3 +117,24 @@ class QTermEdit(QTextEdit):
 
         else:
             self.insertPlainText("\n")
+    
+  
+    def setPrompt(self, bg_color):
+        if self.vfs.cwd == self.vfs.root:
+            cwd = "root"
+
+        elif self.vfs.cwd == self.vfs.home:
+            cwd = ""
+
+        elif self.vfs.cwd.is_related_to(self.vfs.home):
+            cwd = f" {str(self.vfs.cwd.relative_to(self.vfs.home))}"
+
+        else:
+            cwd = self.vfs.cwd.relative_to(self.vfs.root)
+            
+        
+        prompt=f"<span style='color:#ffffff; background-color:{bg_color}';>╭─</span>"
+        prompt+="<span style='color:#011627; background-color:#61AFEF> </span>"
+        prompt+="<span style='color:ffafd2; background-color:#011627></span>"
+
+        return prompt

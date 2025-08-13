@@ -5,7 +5,7 @@ with open("config.toml", "rb") as f:
     config = tomllib.load(f)
 
 # Loads defaults outide of user space because I dont trust myself, imagine users
-prompt_defaults={
+defaults={
 
         # Window settings
         "Dimensions"      : "800x600",
@@ -46,7 +46,7 @@ prompt_defaults={
         }
 
 # User settings
-def load_sets():
+def load_sets(defaults):
     failed=[]
 
     # Function to solve errors from user settings
