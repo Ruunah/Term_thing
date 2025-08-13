@@ -33,7 +33,7 @@ class QTermEdit(QTextEdit):
         if parent.startup_messages:
             self.insertPlainText(str(parent.startup_messages)+"\n")
        
-        prompt = self.setPrompt(sets["Background"])
+        prompt = self.prompt()
         self.insertHtml(prompt)
 
         self.installEventFilter(self)
@@ -45,6 +45,7 @@ class QTermEdit(QTextEdit):
         if obj == self and event.type() == QEvent.KeyPress:
             key = event.key()
             text = event.text()
+            prompt = self.prompt()
 
             if key in (Qt.Key_Return, Qt.Key_Enter):
                 if len(self.input_buffer.split()) > 1:
@@ -63,7 +64,7 @@ class QTermEdit(QTextEdit):
                     self.insertPlainText("\n")
 
                 self.insertPlainText("")  # Move to next line
-                self.insertPlainText(self.prompt)
+                self.insertHtml(prompt)
                 self.history.append(self.input_buffer)
                 self.input_buffer = ""
                 self.history_index = len(self.history)
@@ -119,7 +120,8 @@ class QTermEdit(QTextEdit):
             self.insertPlainText("\n")
     
   
-    def setPrompt(self, bg_color):
+    def prompt(self):
+        bg_color = sets["Background"]
         if self.vfs.cwd == self.vfs.root:
             cwd = "root"
 
@@ -134,7 +136,7 @@ class QTermEdit(QTextEdit):
             
         
         prompt=f"<span style='color:#ffffff; background-color:{bg_color}';>╭─</span>"
-        prompt+="<span style='color:#011627; background-color:#61AFEF> </span>"
+        prompt+="<span style='color:#61AFEF; background-color:#011627> </span>"
         prompt+="<span style='color:ffafd2; background-color:#011627></span>"
 
         return prompt

@@ -1,4 +1,8 @@
+import os
+import re
 import tomllib
+from PySide6.QtGui import QFontDatabase
+
 
 # Imports Settings from config.toml
 with open("config.toml", "rb") as f:

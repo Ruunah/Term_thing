@@ -8,7 +8,6 @@ from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from utils.window.loads import defaults, load_sets, load_font, load_color
 
-sets = load_sets(defaults)
 
 class TerminalWindow(QWidget):
     def __init__(self, vfs):
@@ -19,7 +18,7 @@ class TerminalWindow(QWidget):
 
     def initUI(self):
         self.term_edit = QTermEdit(self)
-        result = load_sets()
+        result = load_sets(defaults)
         if isinstance(result, tuple):
             sets, msg = result
             fails = msg[1:]
