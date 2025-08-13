@@ -26,15 +26,32 @@ class QTermEdit(QTextEdit):
         self.history = []
         self.history_index = -1
         self.setFont(font)
-
-
         if parent.startup_messages:
             self.insertPlainText(str(parent.startup_messages)+"\n")
 
-        self.prompt = "-->"
+        def update_prompt(self):
+            if self.vfs.cwd == self.vfs.root:
+                self.prompt.path = "root"
+
+            elif self.vfs.cwd == self.vfs.home:
+                self.prompt.path = ""
+
+            elif self.vfs.cwd.is_related_to(self.vfs.home):
+                relative = self.vfs.cwd.relative_to(self.vfs.home)
+                self.prompt.path = relative
+        
+            else:
+                relative = self.vfs.cwd.relative_to(self.vfs.root)
+                self.prompt.path = relative
+
+        update_prompt(self)
+        
         self.insertPlainText(self.prompt)
 
         self.installEventFilter(self)
+    
+
+        
 
     def eventFilter(self, obj, event):
         if obj == self and event.type() == QEvent.KeyPress:
@@ -105,11 +122,7 @@ class QTermEdit(QTextEdit):
 
     def run_command(self, command_registry, command, args=""):
         if command in command_registry:
-            if isinstance(args, str):
-                command_registry[command](self, args)
-
-            else:
-                command_registry[command](self, *args)
+            command_registry[command](self, args)
 
         elif command:
             self.insertPlainText("\nCommand Not found\n")

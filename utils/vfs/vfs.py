@@ -7,7 +7,8 @@ class VFS:
         if not os.path.exists(self.root):
             self._initialize_root()
 
-        self.cwd=self.root / "home"
+        self.home = self.root / "home"
+        self.cwd = self.home
     
     def _initialize_root(self):
         os.makedirs(self.root, exist_ok=True)
