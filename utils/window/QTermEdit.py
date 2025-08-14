@@ -22,7 +22,6 @@ class QTermEdit(QTextEdit):
         text_option.setFlags(text_option.flags() | QTextOption.IncludeTrailingSpaces)
         self.document().setDefaultTextOption(text_option)
 
-##        self.setCursorWidth(0)
         self.setLineWrapMode(QTextEdit.NoWrap)
         self.setReadOnly(False)
         self.input_buffer = ""
@@ -117,7 +116,7 @@ class QTermEdit(QTextEdit):
         for _ in range(len(self.input_buffer)):
             cursor.deletePreviousChar()
         self.input_buffer = text
-        self.insertPlainText(text)
+        self.insertPlainText(text) 
 
     def run_command(self, command_registry, command, args=""):
         if command in command_registry:
@@ -146,3 +145,8 @@ class QTermEdit(QTextEdit):
         prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd} </span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
 
         return prompt
+
+    def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvent(event)
+        if self.textCursor().position() < self.input_start_pos:
+        self.moveCursor(QTextCursor.End)
