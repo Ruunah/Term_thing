@@ -10,9 +10,9 @@ def run(self, args):
         
         else:
             for i in range(len(args)):
-                if args.startswith("~/"):
+                if args[i].startswith("~/"):
                     target_path = self.vfs.home / args[i]
-                elif args.startswith("/"):
+                elif args[i].startswith("/"):
                     target_path = self.vfs.cwd / args[i]
     else:
         target_path = self.vfs.cwd

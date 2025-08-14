@@ -149,4 +149,4 @@ class QTermEdit(QTextEdit):
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
         if self.textCursor().position() < self.input_start_pos:
-        self.moveCursor(QTextCursor.End)
+            self.moveCursor(QTextCursor.End)
