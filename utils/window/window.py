@@ -4,17 +4,34 @@ import sys
 import tomllib
 from PySide6.QtCore import Qt
 from utils.window.QTermEdit import QTermEdit
-from PySide6.QtGui import QFontDatabase, QFont
+from PySide6.QtGui import QFontDatabase, QFont, QColor, QPalette, QPainter
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QGraphicsOpacityEffect
 from utils.window.loads import defaults, load_sets, load_font, load_color
 
-def hex_to_rgb(color: str, opacity=0.85) -> str:
+def hex_to_rgb(color: str, opacity=0.85) -> QColor:
     color = color.strip().lstrip("#")
 
     try:
+
         opacity=float(opacity)
+
+        if len(color) != 6:
+            raise(ValueError)
+
         if not(0.0 <= opacity <= 1.0):
-            
+            raise(ValueError)
+
+        else:
+            r = int(color[0:2], 16)
+            g = int(color[2:4], 16)
+            b = int(color[4:6], 16)
+
+        return QColor(r, g, b, (opacity*255))
+
+    except:
+        return QColor(1, 22, 39, (0.85*255))
+
+
 
 class TerminalWindow(QWidget):
     def __init__(self, vfs):
@@ -34,16 +51,20 @@ class TerminalWindow(QWidget):
         else:
             fails=[]
             sets = result
+        
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
+
 
         ## Window
         # Fullscreen or Dimensions
         if str(sets["Fullscreen"]).lower() == "true":
-            self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+            self.setWindowFlags(Qt.WindowType.FramelessWindowHint| Qt.WindowStaysOnTopHint)
             self.showFullScreen()
+
 
         else:
             if not sets["Frame"]:
-                self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+                self.setWindowFlags(Qt.WindowType.FramelessWindowHint| Qt.WindowStaysOnTopHint)
 
             else:
                 self.setWindowFlags(Qt.WindowType.Window)
@@ -56,20 +77,6 @@ class TerminalWindow(QWidget):
                 except ValueError:
                     pass
 
-        if 0.0 <= sets["Opacity"] <= 1.0:
-
-        try:
-            if sets["Opacity"] != 0:
-                self.setAttribute(Qt.WA_TranslucentBackground)
-                opacity_effect = QGraphicsOpacityEffect(self)
-                opacity_effect.setOpacity(float(sets["Opacity"]))
-                self.setGraphicsEffect(opacity_effect)
-
-
-        except (ValueError, TypeError):
-            opacity_effect = QGraphicsOpacityEffect(self)
-            opacity_effect.setOpacity(float(defaults["Opacity"]))
-            self.setGraphicsEffect(opacity_effect)
 
         ## Font
         # Font Size
@@ -82,22 +89,25 @@ class TerminalWindow(QWidget):
             self.startup_messages.append(f"\nWarning: value '{sets['Font_size']}' not valid, using default")
             sets["Font_size"] = defaults["Font_size"]
 
+
         # Get font
         sets["Font_family"] = load_font(defaults, sets, fails)
+
+
         # Actually set the font
         font = QFont(sets["Font_family"], sets["Font_size"])
         font.setStyleStrategy(QFont.PreferAntialias)
         self.setFont(font)
         self.term_edit.setFont(font)
 
+
+        self.rgba = hex_to_rgb(sets["Background"], sets["Opacity"])
+
+
+
         ## Colors
         # Color Pallete
         self.setStyleSheet(f"""
-            QWidget {{
-                background-color : {load_color('Background', defaults, sets, fails)};
-                color : {load_color('Foreground', defaults, sets, fails)};
-            }}
-            
             QScrollBar:vertical{{
                 background : {load_color('Background', defaults, sets, fails)};
                 width : 12px;
@@ -105,7 +115,7 @@ class TerminalWindow(QWidget):
             }}
 
             QTermEdit{{
-                background-color : {load_color('Background', defaults, sets, fails)};
+                background-color : transparent;
                 border : 1px solid {load_color('Cursor', defaults, sets, fails)};
                 color : {load_color('Foreground', defaults, sets, fails)};
             }}
@@ -122,6 +132,11 @@ class TerminalWindow(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
         self.term_edit.setFont(font)
+
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.fillRect(self.rect(), self.rgba)
 
 def main(vfs):
     app = QApplication(sys.argv)
