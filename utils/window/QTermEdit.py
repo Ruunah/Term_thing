@@ -22,7 +22,7 @@ class QTermEdit(QTextEdit):
         text_option.setFlags(text_option.flags() | QTextOption.IncludeTrailingSpaces)
         self.document().setDefaultTextOption(text_option)
 
-        self.setCursorWidth(0)
+##        self.setCursorWidth(0)
         self.setLineWrapMode(QTextEdit.NoWrap)
         self.setReadOnly(False)
         self.input_buffer = ""
@@ -36,7 +36,14 @@ class QTermEdit(QTextEdit):
         self.insertHtml(prompt)
 
 
-        self.input_start_pos = self.textcursor().position()
+        self.input_start_pos = self.textCursor().position()
+
+        cursor = self.textCursor()
+
+        if cursor.position() < self.input_start_pos:
+            cursor.setPosition(self.document().characterCount() -1)
+            self.setTextCursor(cursor)
+            return True
 
 
         self.installEventFilter(self)
