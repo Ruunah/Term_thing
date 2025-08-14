@@ -114,7 +114,7 @@ class QTermEdit(QTextEdit):
             command_registry[command](self, args)
 
         elif command.strip():
-            self.insertPlainText("\nCommand {command} Not found\n")
+            self.insertPlainText("\nCommand Not found\n")
     
   
     def prompt(self):
@@ -133,6 +133,6 @@ class QTermEdit(QTextEdit):
         
         cwd = "❯".join(str(cwd).split("/"))
         
-        prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'>  </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'>{cwd}</span><span style='color:#011627; background-color:{bg_color}'> </span><br>"""
+        prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd} </span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
 
         return prompt

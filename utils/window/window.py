@@ -58,13 +58,13 @@ class TerminalWindow(QWidget):
         ## Window
         # Fullscreen or Dimensions
         if str(sets["Fullscreen"]).lower() == "true":
-            self.setWindowFlags(Qt.WindowType.FramelessWindowHint| Qt.WindowStaysOnTopHint)
+            self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
             self.showFullScreen()
 
 
         else:
             if not sets["Frame"]:
-                self.setWindowFlags(Qt.WindowType.FramelessWindowHint| Qt.WindowStaysOnTopHint)
+                self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
             else:
                 self.setWindowFlags(Qt.WindowType.Window)
