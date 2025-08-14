@@ -7,7 +7,6 @@ from utils.window.loads import defaults, load_sets
 
 sets = load_sets(defaults)
 
-
 class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -36,10 +35,14 @@ class QTermEdit(QTextEdit):
         prompt = self.prompt()
         self.insertHtml(prompt)
 
+
+        self.input_start_pos = self.textcursor().position()
+
+
         self.installEventFilter(self)
     
 
-        
+    
 
     def eventFilter(self, obj, event):
         if obj == self and event.type() == QEvent.KeyPress:
