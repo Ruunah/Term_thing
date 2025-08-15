@@ -1,7 +1,7 @@
 import os
 import re
 import tomllib
-from PySide6.QtGui import QFontDatabase
+from PySide6.QtGui import QFontDatabase, QColor
 
 
 # Imports Settings from config.toml
@@ -154,7 +154,7 @@ def load_color(section, defaults, sets, fails):
     if len(fails) > 1 and f"colors.{section}" in fails[1]:
         return defaults[section]
     else:
-        pattern = r'^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$'
+        pattern = r'^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{9})$'
         try:
             if re.match(pattern, sets[section]):
                 return sets[section]
@@ -165,6 +165,28 @@ def load_color(section, defaults, sets, fails):
 
 
 
+def hex_to_rgb(color: str, opacity=0.85) -> QColor:
+    color = color.strip().lstrip("#")
+
+    try:
+
+        opacity=float(opacity)
+
+        if len(color) != 6:
+            raise(ValueError)
+
+        if not(0.0 <= opacity <= 1.0):
+            raise(ValueError)
+
+        else:
+            r = int(color[0:2], 16)
+            g = int(color[2:4], 16)
+            b = int(color[4:6], 16)
+
+        return QColor(r, g, b, (opacity*255))
+
+    except:
+        return QColor(1, 22, 39, (0.85*255))
 
 
 ######################################################################################################################################################################################

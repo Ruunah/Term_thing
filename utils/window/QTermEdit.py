@@ -54,7 +54,6 @@ class QTermEdit(QTextEdit):
         if obj == self and event.type() == QEvent.KeyPress:
             key = event.key()
             text = event.text()
-            prompt = self.prompt()
 
             if key in (Qt.Key_Return, Qt.Key_Enter):
                 if len(self.input_buffer.split()) > 1:
@@ -62,7 +61,7 @@ class QTermEdit(QTextEdit):
                    command = cmd[0]
                    args = cmd[1:]
                    if len(args)<=1:
-                       args=str(args)
+                       args=str(args[0])
                    self.run_command(command_registry, command, args)
 
                 elif len(self.input_buffer.split())> 0:
@@ -73,6 +72,7 @@ class QTermEdit(QTextEdit):
                     self.insertPlainText("\n")
 
                 self.insertPlainText("")  # Move to next line
+                prompt = self.prompt()
                 self.insertHtml(prompt)
                 self.history.append(self.input_buffer)
                 self.input_buffer = ""
@@ -111,7 +111,6 @@ class QTermEdit(QTextEdit):
         return super().eventFilter(obj, event)
 
     def replace_current_line(self, text):
-        # Remove current input buffer text from widget and replace with `text`
         cursor = self.textCursor()
         for _ in range(len(self.input_buffer)):
             cursor.deletePreviousChar()
@@ -124,27 +123,53 @@ class QTermEdit(QTextEdit):
 
         elif command.strip():
             self.insertPlainText("\nCommand Not found\n")
+
     
   
-    def prompt(self):
-        bg_color = sets["Background"]
-        if self.vfs.cwd == self.vfs.root:
-            cwd = "root"
+    def prompt(self, transient=False):
+        if transient:
+            bg_color = sets["Background"]
+            if self.vfs.cwd == self.vfs.root:
+                cwd = "<b>root<b>"
 
-        elif self.vfs.cwd == self.vfs.home:
-            cwd = ""
+            elif self.vfs.cwd == self.vfs.home:
+                cwd = " "
 
-        elif self.vfs.cwd.is_related_to(self.vfs.home):
-            cwd = f" {str(self.vfs.cwd.relative_to(self.vfs.home))}"
+            elif self.vfs.cwd.is_relative_to(self.vfs.home):
+                cwd = f" ❯<b>{str(self.vfs.cwd.relative_to(self.vfs.home))}<b>"
+
+            else:
+                cwd = self.vfs.cwd.relative_to(self.vfs.root)
+            
+            cwd = "❯".join(str(cwd).split("/"))+"❯ "
+            
+            prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd}</span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
+
+            return prompt
 
         else:
-            cwd = self.vfs.cwd.relative_to(self.vfs.root)
-        
-        cwd = "❯".join(str(cwd).split("/"))
-        
-        prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd} </span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
+            bg_color = sets["Background"]
+            if self.vfs.cwd == self.vfs.root:
+                cwd = "<b>root<b>"
 
-        return prompt
+            elif self.vfs.cwd == self.vfs.home:
+                cwd = " "
+
+            elif self.vfs.cwd.is_relative_to(self.vfs.home):
+                cwd = f" ❯<b>{str(self.vfs.cwd.relative_to(self.vfs.home))}<b>"
+
+            else:
+                cwd = self.vfs.cwd.relative_to(self.vfs.root)
+            
+            cwd = "❯".join(str(cwd).split("/"))+"❯ "
+            
+            prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd}</span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
+
+            return prompt
+
+
+
+
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)

@@ -6,32 +6,7 @@ from PySide6.QtCore import Qt
 from utils.window.QTermEdit import QTermEdit
 from PySide6.QtGui import QFontDatabase, QFont, QColor, QPalette, QPainter
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QGraphicsOpacityEffect
-from utils.window.loads import defaults, load_sets, load_font, load_color
-
-def hex_to_rgb(color: str, opacity=0.85) -> QColor:
-    color = color.strip().lstrip("#")
-
-    try:
-
-        opacity=float(opacity)
-
-        if len(color) != 6:
-            raise(ValueError)
-
-        if not(0.0 <= opacity <= 1.0):
-            raise(ValueError)
-
-        else:
-            r = int(color[0:2], 16)
-            g = int(color[2:4], 16)
-            b = int(color[4:6], 16)
-
-        return QColor(r, g, b, (opacity*255))
-
-    except:
-        return QColor(1, 22, 39, (0.85*255))
-
-
+from utils.window.loads import defaults, load_sets, load_font, load_color, hex_to_rgb
 
 class TerminalWindow(QWidget):
     def __init__(self, vfs):
