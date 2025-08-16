@@ -1,9 +1,9 @@
-//
-//[transient_prompt]
-//  template = '<#61AFEF,transparent></><transparent,#61AFEF>{{ .Folder }}</><#61AFEF,transparent> </>'
-//  foreground = '#ffffff'
-//  background = '#ffafd2'
-//
+
+[transient_prompt]
+   template = '<#61AFEF,transparent></><transparent,#61AFEF>{{ .Folder }}</><#61AFEF,transparent> </>'
+   foreground = '#ffffff'
+   background = '#ffafd2'
+
 
 [[blocks]]
   type = 'prompt'

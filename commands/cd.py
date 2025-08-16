@@ -3,6 +3,7 @@ import pathlib
 
 def run(self, args):
     if args:
+        self.insertPlainText("\n")
         if isinstance(args, str):
             if args != "..":
                 args = args.strip().split("/")
@@ -19,5 +20,3 @@ def run(self, args):
             else:
                 if self.vfs.cwd != self.vfs.root:
                     self.vfs.cwd = self.vfs.cwd.parent
-
-    self.insertPlainText("\n")

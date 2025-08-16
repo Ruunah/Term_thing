@@ -31,7 +31,7 @@ class QTermEdit(QTextEdit):
         if parent.startup_messages:
             self.insertPlainText(str(parent.startup_messages)+"\n")
        
-        prompt = self.prompt()
+        prompt = self.prompt("normal")
         self.insertHtml(prompt)
 
 
@@ -56,23 +56,19 @@ class QTermEdit(QTextEdit):
             text = event.text()
 
             if key in (Qt.Key_Return, Qt.Key_Enter):
-                if len(self.input_buffer.split()) > 1:
-                   cmd = self.input_buffer.split() 
+                if len(self.input_buffer.replace("cd..", "cd ..", 1).split()) > 1:
+                   cmd = self.input_buffer.replace("cd..", "cd  ..", 1).split()
                    command = cmd[0]
                    args = cmd[1:]
                    if len(args)<=1:
                        args=str(args[0])
                    self.run_command(command_registry, command, args)
-
-                elif len(self.input_buffer.split())> 0:
+                
+                else:
                     command = self.input_buffer.strip()
                     self.run_command(command_registry, command)
 
-                else:
-                    self.insertPlainText("\n")
-
-                self.insertPlainText("")  # Move to next line
-                prompt = self.prompt()
+                prompt = self.prompt("normal")
                 self.insertHtml(prompt)
                 self.history.append(self.input_buffer)
                 self.input_buffer = ""
@@ -117,61 +113,75 @@ class QTermEdit(QTextEdit):
         self.input_buffer = text
         self.insertPlainText(text) 
 
-    def run_command(self, command_registry, command, args=""):
-        if command in command_registry:
-            command_registry[command](self, args)
+    def run_command(self, command_registry, command="", args=""):
+        cursor = self.textCursor()
+        for _ in range(len(self.input_buffer)+3):
+            cursor.movePosition(QTextCursor.Left, QTextCursor.KeepAnchor)
 
-        elif command.strip():
-            self.insertPlainText("\nCommand Not found\n")
+        cursor.movePosition(QTextCursor.Up, QTextCursor.KeepAnchor)
+        cursor.removeSelectedText()
+        self.insertHtml(self.prompt("transient"))
+        bg_color = sets["Background"]
+        self.insertHtml(f"<span style='color:#ffffff; background-color:{bg_color}'>{self.input_buffer}</span>")
+
+        if command:
+            if command in command_registry:
+                command_registry[command](self, args)
+
+            elif command.strip():
+                self.insertPlainText("\nCommand Not found\n")
+
+        else:
+            self.insertPlainText("\n")
 
     
   
-    def prompt(self, transient=False):
-        if transient:
-            bg_color = sets["Background"]
-            if self.vfs.cwd == self.vfs.root:
-                cwd = "<b>root<b>"
+    def prompt(self, style=""):
+        bg_color = sets["Background"]
+        try:
+            match style:
+                case "transient":
+                    if self.vfs.cwd == self.vfs.root:
+                        cwd = "<b>root<b>"
 
-            elif self.vfs.cwd == self.vfs.home:
-                cwd = " "
+                    elif self.vfs.cwd == self.vfs.home:
+                        cwd = " "
 
-            elif self.vfs.cwd.is_relative_to(self.vfs.home):
-                cwd = f" ❯<b>{str(self.vfs.cwd.relative_to(self.vfs.home))}<b>"
+                    else:
+                        cwd = str(self.vfs.cwd.relative_to(self.vfs.root)).replace("\\", "/").split("/")[-1]
+                    
+                    prompt=f"""<span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'>{cwd}</span><span style='color:#61AFEF; background-color:{bg_color}'></span>"""
 
-            else:
-                cwd = self.vfs.cwd.relative_to(self.vfs.root)
-            
-            cwd = "❯".join(str(cwd).split("/"))+"❯ "
-            
-            prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd}</span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
+                    return prompt
 
-            return prompt
+                case "normal":
+                    if self.vfs.cwd == self.vfs.root:
+                        cwd = "<b>root <b>"
 
-        else:
-            bg_color = sets["Background"]
-            if self.vfs.cwd == self.vfs.root:
-                cwd = "<b>root<b>"
+                    elif self.vfs.cwd == self.vfs.home:
+                        cwd = " "
 
-            elif self.vfs.cwd == self.vfs.home:
-                cwd = " "
+                    elif self.vfs.cwd.is_relative_to(self.vfs.home):
+                        cwd = f" ❯<b>{str(self.vfs.cwd.relative_to(self.vfs.home))}<b>"
 
-            elif self.vfs.cwd.is_relative_to(self.vfs.home):
-                cwd = f" ❯<b>{str(self.vfs.cwd.relative_to(self.vfs.home))}<b>"
+                    else:
+                        cwd = self.vfs.cwd.relative_to(self.vfs.root)
+                    
+                    cwd = "❯".join(str(cwd).split("/"))+"❯ "
+                    
+                    prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd}</span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
 
-            else:
-                cwd = self.vfs.cwd.relative_to(self.vfs.root)
-            
-            cwd = "❯".join(str(cwd).split("/"))+"❯ "
-            
-            prompt=f"""<span style='color:#ffffff; background-color:{bg_color}'>╭─</span><span style='color:#61AFEF; background-color:{bg_color}'></span><span style='color:#011627; background-color:#61AFEF'> </span><span style='color:#61AFEF; background-color:#ffafd2'></span><span style='color:#011627; background-color:#ffafd2'> {cwd}</span><span style='color:#ffafd2; background-color:{bg_color}'><br></span><span style='color:#ffffff; background-color:{bg_color}'>╰─</span>"""
+                    return prompt
 
-            return prompt
+                case _:
+                    raise(ValueError)
 
-
+        except(ValueError):
+            print("style can only be normal or transient")
 
 
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
         if self.textCursor().position() < self.input_start_pos:
-            self.moveCursor(QTextCursor.End)
+            self.movePosition(QTextCursor.End)

@@ -1,8 +1,10 @@
 def run(self, args=""):
     if args:
-        if len(args) == 1:
-            self.insertPlainText(f"\n{args[0]}\n")
+        if isinstance(args, str):
+            self.insertPlainText(f"\n{args}\n")
         else:
-            self.insertPlainText("\nToo many arguments\n")
+            self.insertPlainText("\n")
+            for key in args:
+                self.insertPlainText(f"{key}\n")
     else:
         self.insertPlainText("\nNo arguments input\n")
