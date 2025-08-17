@@ -56,6 +56,9 @@ class QTermEdit(QTextEdit):
             text = event.text()
 
             if key in (Qt.Key_Return, Qt.Key_Enter):
+                cursor = self.QTextCursor
+                cursor.movePosition(QTextCursor.EndOfLine)
+                self.setTextCursor(cursor)
                 if len(self.input_buffer.replace("cd..", "cd ..", 1).split()) > 1:
                    cmd = self.input_buffer.replace("cd..", "cd  ..", 1).split()
                    command = cmd[0]
@@ -98,6 +101,14 @@ class QTermEdit(QTextEdit):
                     self.history_index = len(self.history)
                     self.replace_current_line("")
                 return True
+
+            elif key == Qt.Key_Left:
+                cursor = self.textCursor()
+                cursor.movePosition(QTextCursor.Left, QTextCursor.MoveAnchor)
+
+            elif key == Qt.Key_Right:
+                cursor = self.textCursor()
+                cursor.movePosition(QTextCursor.Right, QTextCursor.MoveAnchor)
 
             elif text.isprintable():
                 self.input_buffer += text

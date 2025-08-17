@@ -8,21 +8,21 @@ def run(self, args):
                 target_path = self.vfs.home / args[2:]
 
             elif args.startswith("/"):
-                target_path = self.vfs.cwd / args[1:]
+                target_path = self.vfs.root / args[1:]
 
-            elif path(args[1]).is_relative_to(self.vfs.cwd):
-                target_path = self.vfs.cwd / args[1]
+            else:
+                target_path = self.vfs.cwd / args
         
         else:
-            args = [arg.strip() for arg in args]
-            if args[1].startswith("~/"):
-                target_path = self.vfs.home / args[1][2:]
+            arg = args[0].strip()
+            if arg.startswith("~/"):
+                target_path = self.vfs.home / arg[2:]
 
-            elif args[1].startswith("/"):
-                target_path = self.vfs.root / args[1][1:]
+            elif arg.startswith("/"):
+                target_path = self.vfs.root / arg[1:]
 
-            elif path(args[1]).is_relative_to(self.vfs.cwd):
-                target_path = self.vfs.cwd / args[1]
+            else:
+                target_path = self.vfs.cwd / arg
 
     else:
         target_path = self.vfs.cwd
