@@ -5,7 +5,7 @@ from utils import module_registry, module_dir_registry
 from utils.window.loads import defaults, load_sets
 from utils.window.CursorManager import Cursor_Manager
 from utils.window.EventHandler import eventHandler
-from utils.window.prompt import Prompt
+from utils.window.prompt import load as Prompt
 
 sets = load_sets(defaults)
 
@@ -14,7 +14,7 @@ class QTermEdit(QTextEdit):
         super().__init__(parent)
         self.cursor_manager = Cursor_Manager(self)
         self.event_handler = eventHandler(self)
-        self.prompt = Prompt(self)
+        self.prompt = Prompt
               
         ## Import vfs
         self.vfs = parent.vfs
@@ -36,7 +36,7 @@ class QTermEdit(QTextEdit):
         if parent.startup_messages:
             self.insertPlainText(str(parent.startup_messages)+"\n")
        
-        prompt = self.prompt.load(sets["Background"], "normal")
+        prompt = self.prompt(self, sets["Background"], "normal")
         self.insertHtml(prompt)
         self.input_start_pos = self.textCursor().position()
 

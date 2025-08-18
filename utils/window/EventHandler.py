@@ -34,7 +34,7 @@ class eventHandler(QObject):
                         command = self.term.input_buffer.strip()
                         self.run_command(command_registry, command)
 
-                    prompt = self.term.prompt.load(sets["Background"], "normal")
+                    prompt = self.term.prompt(self.term, sets["Background"], "normal")
                     self.term.insertHtml(prompt)
                     self.term.history.append(self.term.input_buffer)
                     self.term.input_buffer = ""
@@ -81,13 +81,14 @@ class eventHandler(QObject):
 
         cursor.movePosition(QTextCursor.Up, QTextCursor.KeepAnchor)
         cursor.removeSelectedText()
-        self.term.insertHtml(self.term.prompt.load(sets["Background"], "transient"))
-        self.term.insertHtml(f"""<span style='color:#ffffff; background-color:{sets["Background"]}'>{self.term.input_buffer}</span>""")
+        self.term.insertHtml(self.term.prompt(self.term, sets["Background"], "transient"))
+        if self.term.input_buffer:
+            self.term.insertHtml(f"""<span style='color:#ffffff; background-color:{sets["Background"]}'>{self.term.input_buffer}</span>""")
         
         # Command execution
         if command:
             if command in command_registry:
-                command_registry[command](self, args)
+                command_registry[command](self.term, args)
 
             elif command.strip():
                 self.term.insertPlainText("\nCommand Not found\n")

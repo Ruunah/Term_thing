@@ -1,3 +1,5 @@
+from PySide6.QtGui import QTextCursor
+
 class Cursor_Manager:
     def __init__(self, term):
         self.term = term
@@ -16,7 +18,7 @@ class Cursor_Manager:
     def insert_text(self, text):
         self.term.input_buffer += text
         self.term.insertPlainText(text)
-        self.term.move_to_end()
+        self.move_to_end()
 
     def delete_previous(self):
         if self.term.input_buffer:
@@ -32,7 +34,7 @@ class Cursor_Manager:
         self.term.insertPlainText(text) 
         
     def enforce_input_zone(self):
-        cursor = self.term.textCursor
-        if cursor.position() < self.input_start_pos:
-            cursor.movePosition(self.input_start_pos)
+        cursor = self.term.textCursor()
+        if cursor.position() < self.term.input_start_pos:
+            cursor.setPosition(self.term.input_start_pos)
             self.term.setTextCursor(cursor)
