@@ -4,17 +4,16 @@ from PySide6.QtCore import QPoint
 from utils.window.loads import defaults, load_sets, hex_to_rgb
 from commands import command_registry
 
-self = load_sets(defaults)
+sets = load_sets(defaults)
 
-class PopupWindow(parent=""):
-    def __init__(self, parent):
+class PopupWindow(QListWidget):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.parent = parent
         
-        PopupWindow.setWindowFlags(
+        self.setWindowFlags(
         Qt.WindowType.FramelessWindowHint |
         Qt.WindowType.WindowStaysOnTopHint |
-        Qt.WindowType.Tool  # Prevents taskbar entry
+        Qt.WindowType.Tool
         )
 
         ## Font setting
@@ -30,25 +29,28 @@ class PopupWindow(parent=""):
 
         def update(self):
             list_widget.clear()
-            list_widget.addItems(self.parent._ghost_text.list)
+            self.suggestions.check_()
+            for key in self._ghost_text.list:
+                list_widget.addItems(key)
 
-class GhostTextMixin(parent=""):
-    def __init__(self):
-        self._ghost_text = ""
+class GhostTextMixin():
+    def __init__(self, parent=None):
+        self._ghost_text.text = ""
         self._ghost_text.list = []
-        self._ghost_text.color = QColor(hex_to_rgb(self["Foreground"], "0.5"))
+        self._ghost_text.color = QColor(hex_to_rgb(sets["Foreground"], "0.5"))
         self.parent = parent
 
     def check_(self):
         for key in command_registry:
             if self.parent.input_buffer in key:
-                self._ghost_text.list.append(key)
+                self._ghost_text.list.append(str(key).strip())
     
     def update_(self):
         self.check_()
         if self._ghost_text.list:
-            if self._ghost_text.list <= 1:
-                self._ghost_text = str(self._ghost_text.list[0])[-len(self.parent.input_buffer)]
+            if len(self._ghost_text.list) != 0:
+                if len(self._ghost_text.list) <= 1:
+                    self._ghost_text.text = str(self._ghost_text.list[0])[-len(self.parent.input_buffer)]
 
-            else:
-                PopupWindow.__init__()
+                else:
+                    self.parent.sugestions.visual = PopupWindow(self.parent)
