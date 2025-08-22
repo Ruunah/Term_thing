@@ -19,14 +19,23 @@ def run(self, args):
 
                 args = args.strip().split("/")
                 if len(args)<=1:
-                    self.vfs.cwd = pathlib.Path(os.path.join(start, args[0]))
+                    result = pathlib.Path(os.path.join(start, args[0]))
+                    if result.is_dir():
+                        self.vfs.cwd = result
+
+                    else:
+                        self.insertPlainText("Error: Input path is invalid\n")
 
                 else:
                     result = start
                     for part in args:
                         result = os.path.join(result, part)
 
-                    self.vfs.cwd = pathlib.Path(result)
+                    if result.is_dir():
+                        self.vfs.cwd = result
+
+                    else:
+                        self.insertPlainText("Error: Input path is invalid\n")
 
             else:
                 if self.vfs.cwd != self.vfs.root:

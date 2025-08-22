@@ -53,4 +53,4 @@ def run(self, args):
             self.insertPlainText(dirs)
 
     except:
-        self.insertPlainText("Error, input path is invalid\n")
+        self.insertPlainText("Error: Input path is invalid\n")

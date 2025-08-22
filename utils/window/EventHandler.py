@@ -12,7 +12,7 @@ class eventHandler(QObject):
         self.term = term
         self.cursor_manager = Cursor_Manager(self.term)
 
-    def on_text_changed(self, term):## Every runs every time something changes
+#    def on_text_changed(self, term):## Every runs every time something changes
                                     # Currentlly waiting for the sugestions to work
         
 
