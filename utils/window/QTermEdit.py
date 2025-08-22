@@ -6,14 +6,12 @@ from utils.window.loads import defaults, load_sets
 from utils.window.CursorManager import Cursor_Manager
 from utils.window.EventHandler import eventHandler
 from utils.window.prompt import load as Prompt
-from utils.window.command_suggestions import GhostTextMixin
 
 sets = load_sets(defaults)
 
 class QTermEdit(QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.suggestions = GhostTextMixin
         self.cursor_manager = Cursor_Manager(self)
         self.event_handler = eventHandler(self)
         self.prompt = Prompt

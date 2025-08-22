@@ -2,8 +2,8 @@ import os
 import pathlib
 
 def run(self, args):
+    self.insertPlainText("\n")
     if args:
-        self.insertPlainText("\n")
         if isinstance(args, str):
             if args != "..":
                 if args.startswith("~/"):
