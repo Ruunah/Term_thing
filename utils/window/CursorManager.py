@@ -28,10 +28,13 @@ class Cursor_Manager:
         
     def replace_current_line(self, text):
         cursor = self.term.textCursor()
-        for _ in range(len(self.input_buffer)):
-            self.term.delete_previous
+        cursor.setPosition(self.term.input_start_pos)
+        cursor.movePosition(QTextCursor.End, QTextCursor.KeepAnchor)
+        cursor.removeSelectedText()
+        self.term.setTextCursor(cursor)
+        self.term.insertPlainText(text)
         self.term.input_buffer = text
-        self.term.insertPlainText(text) 
+        self.move_to_end()
         
     def enforce_input_zone(self):
         cursor = self.term.textCursor()

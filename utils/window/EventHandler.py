@@ -73,6 +73,7 @@ class eventHandler(QObject):
                 case _:
                     if text.isprintable():
                         self.cursor_manager.insert_text(text)
+                        self.term.show_suggestions()
                         return True
 
         return super().eventFilter(obj, event)
